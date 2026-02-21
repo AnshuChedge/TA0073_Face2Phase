@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Performance Report - Face2Phase</title>
+  <meta name="theme-color" content="#0d0d1a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="navbar" role="banner">
+    <div class="container flex items-center justify-between">
+      <a href="/index.html" class="navbar-brand">
+        <span class="logo-icon" aria-hidden="true">F2</span>
+        Face2Phase
+      </a>
+      <div class="flex items-center gap-3">
+        <a href="/setup.html" class="btn btn-primary btn-sm">Practice Again</a>
+      </div>
+    </div>
+  </header>
+
+  <main style="padding: 2rem 0 4rem;">
+    <div class="container" style="max-width: 1000px;">
+      <!-- Report Header -->
+      <div class="text-center" style="margin-bottom: 3rem;">
+        <h1 style="margin-bottom: 0.5rem;">Performance Report</h1>
+        <p class="text-muted">Comprehensive analysis of your interview session</p>
+      </div>
+
+      <!-- Overall Score -->
+      <div class="card" style="text-align: center; margin-bottom: 2rem; padding: 2.5rem;">
+        <div class="score-circle" id="overall-score-circle" style="margin: 0 auto 1rem;">
+          <span class="number" id="overall-score">--</span>
+          <span class="out-of">/ 100</span>
+        </div>
+        <h3 id="overall-label" style="margin-bottom: 0.25rem;">--</h3>
+        <p class="text-muted text-sm" id="session-info">Session duration: --</p>
+      </div>
+
+      <!-- Score Cards -->
+      <div class="report-scores-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem;">
+        <div class="card" id="score-bodyLanguage">
+          <p class="text-xs text-muted" style="margin-bottom: 0.5rem;">Body Language</p>
+          <div class="flex items-center justify-between" style="margin-bottom: 0.5rem;">
+            <span style="font-size: 1.5rem; font-weight: 800; font-family: 'Space Grotesk', sans-serif;" class="score-val">--</span>
+            <span class="badge score-badge">--</span>
+          </div>
+          <div class="progress-bar"><div class="fill score-fill" style="width: 0%"></div></div>
+        </div>
+        <div class="card" id="score-facialEmotion">
+          <p class="text-xs text-muted" style="margin-bottom: 0.5rem;">Facial Emotion</p>
+          <div class="flex items-center justify-between" style="margin-bottom: 0.5rem;">
+            <span style="font-size: 1.5rem; font-weight: 800; font-family: 'Space Grotesk', sans-serif;" class="score-val">--</span>
+            <span class="badge score-badge">--</span>
+          </div>
+          <div class="progress-bar"><div class="fill cyan score-fill" style="width: 0%"></div></div>
+        </div>
+        <div class="card" id="score-fearStress">
+          <p class="text-xs text-muted" style="margin-bottom: 0.5rem;">Fear & Stress</p>
+          <div class="flex items-center justify-between" style="margin-bottom: 0.5rem;">
+            <span style="font-size: 1.5rem; font-weight: 800; font-family: 'Space Grotesk', sans-serif;" class="score-val">--</span>
+            <span class="badge score-badge">--</span>
+          </div>
+          <div class="progress-bar"><div class="fill red score-fill" style="width: 0%"></div></div>
+        </div>
+        <div class="card" id="score-emotionStability">
+          <p class="text-xs text-muted" style="margin-bottom: 0.5rem;">Emotion Stability</p>
+          <div class="flex items-center justify-between" style="margin-bottom: 0.5rem;">
+            <span style="font-size: 1.5rem; font-weight: 800; font-family: 'Space Grotesk', sans-serif;" class="score-val">--</span>
+            <span class="badge score-badge">--</span>
+          </div>
+          <div class="progress-bar"><div class="fill yellow score-fill" style="width: 0%"></div></div>
+        </div>
+        <div class="card" id="score-speechClarity">
+          <p class="text-xs text-muted" style="margin-bottom: 0.5rem;">Speech Clarity</p>
+          <div class="flex items-center justify-between" style="margin-bottom: 0.5rem;">
+            <span style="font-size: 1.5rem; font-weight: 800; font-family: 'Space Grotesk', sans-serif;" class="score-val">--</span>
+            <span class="badge score-badge">--</span>
+          </div>
+          <div class="progress-bar"><div class="fill score-fill" style="width: 0%"></div></div>
+        </div>
+        <div class="card" id="score-confidence">
+          <p class="text-xs text-muted" style="margin-bottom: 0.5rem;">Confidence</p>
+          <div class="flex items-center justify-between" style="margin-bottom: 0.5rem;">
+            <span style="font-size: 1.5rem; font-weight: 800; font-family: 'Space Grotesk', sans-serif;" class="score-val">--</span>
+            <span class="badge score-badge">--</span>
+          </div>
+          <div class="progress-bar"><div class="fill cyan score-fill" style="width: 0%"></div></div>
+        </div>
+        <div class="card" id="score-answerQuality">
+          <p class="text-xs text-muted" style="margin-bottom: 0.5rem;">Answer Quality</p>
+          <div class="flex items-center justify-between" style="margin-bottom: 0.5rem;">
+            <span style="font-size: 1.5rem; font-weight: 800; font-family: 'Space Grotesk', sans-serif;" class="score-val">--</span>
+            <span class="badge score-badge">--</span>
+          </div>
+          <div class="progress-bar"><div class="fill orange score-fill" style="width: 0%"></div></div>
+        </div>
+        <div class="card" id="score-engagement">
+          <p class="text-xs text-muted" style="margin-bottom: 0.5rem;">Engagement</p>
+          <div class="flex items-center justify-between" style="margin-bottom: 0.5rem;">
+            <span style="font-size: 1.5rem; font-weight: 800; font-family: 'Space Grotesk', sans-serif;" class="score-val">--</span>
+            <span class="badge score-badge">--</span>
+          </div>
+          <div class="progress-bar"><div class="fill score-fill" style="width: 0%"></div></div>
+        </div>
+      </div>
+
+      <!-- Charts Row 1 -->
+      <div class="report-charts-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-bottom: 1.5rem;">
+        <div class="card">
+          <h4 style="margin-bottom: 1rem;">Skills Radar</h4>
+          <canvas id="chart-radar" class="chart-canvas" style="height: 280px;"></canvas>
+        </div>
+        <div class="card">
+          <h4 style="margin-bottom: 1rem;">Score Breakdown</h4>
+          <canvas id="chart-bar" class="chart-canvas" style="height: 280px;"></canvas>
+        </div>
+      </div>
+
+      <!-- Charts Row 2 -->
+      <div class="report-charts-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-bottom: 1.5rem;">
+        <div class="card">
+          <h4 style="margin-bottom: 0.5rem;">Emotion Timeline</h4>
+          <div class="flex gap-3 flex-wrap" style="margin-bottom: 0.75rem;">
+            <span class="text-xs" style="color: #22c55e;">-- Confidence</span>
+            <span class="text-xs" style="color: #ef4444;">-- Nervousness</span>
+            <span class="text-xs" style="color: #eab308;">-- Fear</span>
+            <span class="text-xs" style="color: #06b6d4;">-- Calmness</span>
+          </div>
+          <canvas id="chart-emotion" class="chart-canvas" style="height: 220px;"></canvas>
+        </div>
+        <div class="card">
+          <h4 style="margin-bottom: 1rem;">Confidence Trend</h4>
+          <canvas id="chart-confidence" class="chart-canvas" style="height: 220px;"></canvas>
+        </div>
+      </div>
+
+      <!-- Stress Heat Map -->
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <h4 style="margin-bottom: 0.5rem;">Stress Heat Map</h4>
+        <p class="text-xs text-muted" style="margin-bottom: 0.75rem;">Stress intensity across different session segments. Redder = higher stress.</p>
+        <canvas id="chart-heatmap" class="chart-canvas" style="height: 100px;"></canvas>
+      </div>
+
+      <!-- Fear Trigger Moments -->
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <h4 style="margin-bottom: 1rem;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-red)" stroke-width="2" style="display: inline; vertical-align: middle;" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+          Fear Trigger Moments
+        </h4>
+        <div class="flex flex-col gap-3" id="fear-triggers"></div>
+      </div>
+
+      <!-- Strengths & Weaknesses -->
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-bottom: 1.5rem;">
+        <div class="card">
+          <h4 style="margin-bottom: 1rem; color: var(--primary);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline; vertical-align: middle;" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            Strengths
+          </h4>
+          <ul id="strengths-list" style="list-style: none; display: flex; flex-direction: column; gap: 0.6rem;"></ul>
+        </div>
+        <div class="card">
+          <h4 style="margin-bottom: 1rem; color: var(--accent-yellow);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline; vertical-align: middle;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+            Areas for Improvement
+          </h4>
+          <ul id="weaknesses-list" style="list-style: none; display: flex; flex-direction: column; gap: 0.6rem;"></ul>
+        </div>
+      </div>
+
+      <!-- Suggestions -->
+      <div class="card" style="margin-bottom: 2rem;">
+        <h4 style="margin-bottom: 1rem;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2" style="display: inline; vertical-align: middle;" aria-hidden="true"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/></svg>
+          Personalized Suggestions
+        </h4>
+        <div class="flex flex-col gap-3" id="suggestions-list"></div>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex justify-center gap-4">
+        <a href="/setup.html" class="btn btn-primary btn-lg">Practice Again</a>
+        <button class="btn btn-secondary btn-lg" onclick="downloadReport()">Download Report</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>Face2Phase &mdash; AI-Powered Interview Practice Platform</p>
+    </div>
+  </footer>
+
+  <script src="/app.js"></script>
+  <script>
+    // Load or generate report data
+    const data = loadSession('report', null) || generateReportData();
+    const sessionTime = loadSession('sessionTime', 180);
+
+    function populateReport() {
+      // Overall score
+      const circle = document.getElementById('overall-score-circle');
+      circle.style.borderColor = getScoreColor(data.overall);
+      circle.style.boxShadow = `0 0 30px ${getScoreColor(data.overall)}33`;
+      document.getElementById('overall-score').textContent = data.overall;
+      document.getElementById('overall-label').textContent = getScoreLabel(data.overall) + ' Performance';
+      document.getElementById('session-info').textContent = `Session duration: ${formatTime(sessionTime)}`;
+
+      // Score cards
+      const scoreKeys = ['bodyLanguage', 'facialEmotion', 'fearStress', 'emotionStability', 'speechClarity', 'confidence', 'answerQuality', 'engagement'];
+      scoreKeys.forEach(key => {
+        const card = document.getElementById('score-' + key);
+        if (!card) return;
+        const val = data.scores[key];
+        // For fearStress, lower is better (invert for label)
+        const displayVal = key === 'fearStress' ? (100 - val) : val;
+        card.querySelector('.score-val').textContent = displayVal;
+        card.querySelector('.score-badge').textContent = getScoreLabel(displayVal);
+        card.querySelector('.score-fill').style.width = displayVal + '%';
+      });
+
+      // Radar chart
+      const radarLabels = ['Body Lang.', 'Facial', 'Emotion', 'Speech', 'Confidence', 'Answer', 'Engage', 'Composure'];
+      const radarData = [
+        data.scores.bodyLanguage,
+        data.scores.facialEmotion,
+        data.scores.emotionStability,
+        data.scores.speechClarity,
+        data.scores.confidence,
+        data.scores.answerQuality,
+        data.scores.engagement,
+        100 - data.scores.fearStress
+      ];
+      setTimeout(() => drawRadarChart(document.getElementById('chart-radar'), radarData, radarLabels), 100);
+
+      // Bar chart
+      const barLabels = ['Body Language', 'Facial Emotion', 'Composure', 'Emotion Stability', 'Speech Clarity', 'Confidence', 'Answer Quality', 'Engagement'];
+      const barData = [
+        data.scores.bodyLanguage,
+        data.scores.facialEmotion,
+        100 - data.scores.fearStress,
+        data.scores.emotionStability,
+        data.scores.speechClarity,
+        data.scores.confidence,
+        data.scores.answerQuality,
+        data.scores.engagement
+      ];
+      const barColors = ['#22c55e', '#06b6d4', '#ef4444', '#eab308', '#22c55e', '#06b6d4', '#f97316', '#22c55e'];
+      setTimeout(() => drawBarChart(document.getElementById('chart-bar'), barData, barLabels, barColors), 150);
+
+      // Emotion timeline
+      const timeLabels = data.emotionTimeline.map(d => d.time + 'm');
+      const confData = data.emotionTimeline.map(d => d.confidence);
+      const nervData = data.emotionTimeline.map(d => d.nervousness);
+      const fearData = data.emotionTimeline.map(d => d.fear);
+      const calmData = data.emotionTimeline.map(d => d.calmness);
+      setTimeout(() => drawLineChart(document.getElementById('chart-emotion'), [confData, nervData, fearData, calmData], timeLabels), 200);
+
+      // Confidence trend (area chart)
+      setTimeout(() => drawAreaChart(document.getElementById('chart-confidence'), confData), 250);
+
+      // Stress heat map
+      setTimeout(() => drawHeatMap(document.getElementById('chart-heatmap'), 4, 12), 300);
+
+      // Fear triggers
+      const triggersEl = document.getElementById('fear-triggers');
+      data.fearTriggers.forEach(t => {
+        const div = document.createElement('div');
+        div.style.cssText = 'display: flex; align-items: center; gap: 1rem; padding: 0.75rem; background: var(--bg-input); border-radius: var(--radius-sm);';
+        const severityColor = t.severity >= 75 ? 'var(--accent-red)' : t.severity >= 50 ? 'var(--accent-yellow)' : 'var(--accent-orange)';
+        div.innerHTML = `
+          <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; color: var(--fg-muted); min-width: 40px;">${t.time}</span>
+          <div style="flex: 1;">
+            <p class="text-sm" style="font-weight: 500; margin-bottom: 0.3rem;">${t.question}</p>
+            <div class="progress-bar" style="height: 6px;"><div class="fill" style="width: ${t.severity}%; background: ${severityColor};"></div></div>
+          </div>
+          <span style="font-weight: 700; color: ${severityColor}; font-size: 0.9rem;">${t.severity}%</span>
+        `;
+        triggersEl.appendChild(div);
+      });
+
+      // Strengths
+      const strengthsList = document.getElementById('strengths-list');
+      data.strengths.forEach(s => {
+        const li = document.createElement('li');
+        li.className = 'text-sm';
+        li.style.cssText = 'padding: 0.5rem 0.75rem; background: rgba(34,197,94,0.08); border-radius: var(--radius-sm); border-left: 3px solid var(--primary);';
+        li.textContent = s;
+        strengthsList.appendChild(li);
+      });
+
+      // Weaknesses
+      const weaknessesList = document.getElementById('weaknesses-list');
+      data.weaknesses.forEach(w => {
+        const li = document.createElement('li');
+        li.className = 'text-sm';
+        li.style.cssText = 'padding: 0.5rem 0.75rem; background: rgba(234,179,8,0.08); border-radius: var(--radius-sm); border-left: 3px solid var(--accent-yellow);';
+        li.textContent = w;
+        weaknessesList.appendChild(li);
+      });
+
+      // Suggestions
+      const suggestionsEl = document.getElementById('suggestions-list');
+      data.suggestions.forEach((s, i) => {
+        const div = document.createElement('div');
+        div.style.cssText = 'display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.75rem; background: var(--bg-input); border-radius: var(--radius-sm);';
+        div.innerHTML = `
+          <span style="width: 24px; height: 24px; border-radius: 50%; background: rgba(6,182,212,0.15); color: var(--accent-cyan); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; flex-shrink: 0;">${i + 1}</span>
+          <p class="text-sm">${s}</p>
+        `;
+        suggestionsEl.appendChild(div);
+      });
+    }
+
+    function downloadReport() {
+      const text = [
+        '=== Face2Phase Performance Report ===',
+        '',
+        `Overall Score: ${data.overall}/100 (${getScoreLabel(data.overall)})`,
+        `Session Duration: ${formatTime(sessionTime)}`,
+        '',
+        '--- Scores ---',
+        ...Object.entries(data.scores).map(([k, v]) => `${k}: ${k === 'fearStress' ? 100 - v : v}/100`),
+        '',
+        '--- Strengths ---',
+        ...data.strengths.map(s => `+ ${s}`),
+        '',
+        '--- Areas for Improvement ---',
+        ...data.weaknesses.map(w => `- ${w}`),
+        '',
+        '--- Suggestions ---',
+        ...data.suggestions.map((s, i) => `${i + 1}. ${s}`),
+        '',
+        '--- Fear Trigger Moments ---',
+        ...data.fearTriggers.map(t => `[${t.time}] ${t.question} (Severity: ${t.severity}%)`),
+      ].join('\n');
+
+      const blob = new Blob([text], { type: 'text/plain' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'face2phase-report.txt';
+      a.click();
+    }
+
+    populateReport();
+  </script>
+</body>
+</html>

@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Group Discussion - Face2Phase</title>
+  <meta name="theme-color" content="#0d0d1a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="navbar" role="banner">
+    <div class="container flex items-center justify-between">
+      <a href="/index.html" class="navbar-brand">
+        <span class="logo-icon" aria-hidden="true">F2</span>
+        Face2Phase
+      </a>
+      <div class="flex items-center gap-4">
+        <div class="flex items-center gap-2">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--fg-muted)" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span id="timer" style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.1rem;">0:00</span>
+        </div>
+        <span class="badge cyan">Group Discussion</span>
+        <button class="btn btn-sm btn-danger" onclick="endSession()">End Session</button>
+      </div>
+    </div>
+  </header>
+
+  <main style="padding: 1.5rem 0 3rem;">
+    <div class="container">
+      <div class="interview-layout" style="display: flex; gap: 1.5rem;">
+        <!-- Left Column -->
+        <div class="interview-left" style="width: 55%; display: flex; flex-direction: column; gap: 1.25rem;">
+          <!-- Topic Card -->
+          <div class="card" style="border-color: rgba(6,182,212,0.3); background: rgba(6,182,212,0.05);">
+            <p class="text-xs text-muted" style="margin-bottom: 0.5rem;">Discussion Topic</p>
+            <h3 id="gd-topic" style="color: var(--accent-cyan); font-size: 1.1rem;">Loading topic...</h3>
+          </div>
+
+          <!-- Participants -->
+          <div class="card">
+            <h4 style="margin-bottom: 0.75rem;">Participants</h4>
+            <div class="flex gap-3 flex-wrap" id="participants-list">
+              <div class="flex items-center gap-2">
+                <div class="chat-avatar" style="background: rgba(34,197,94,0.2); color: #22c55e;">You</div>
+                <span class="text-sm">You</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chat Messages -->
+          <div class="card" style="padding: 0.75rem;">
+            <div class="chat-container" id="chat-container" aria-live="polite" aria-label="Discussion messages"></div>
+          </div>
+
+          <!-- Speak Button -->
+          <div class="flex items-center gap-4">
+            <button class="btn btn-primary" id="speak-btn" onclick="toggleSpeak()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+              Start Speaking
+            </button>
+            <div class="flex gap-4">
+              <div class="text-center"><span class="text-xs text-muted">Speaking Time</span><br><span id="speak-time" style="font-weight: 700; font-family: 'Space Grotesk', sans-serif;">0:00</span></div>
+              <div class="text-center"><span class="text-xs text-muted">Interruptions</span><br><span id="interruptions" style="font-weight: 700; font-family: 'Space Grotesk', sans-serif; color: var(--accent-yellow);">0</span></div>
+            </div>
+          </div>
+
+          <!-- Webcam -->
+          <div class="card" style="padding: 0.75rem;">
+            <div class="webcam-container" id="webcam-container" style="aspect-ratio: 16/9;">
+              <video id="webcam-video" autoplay muted playsinline></video>
+              <div class="webcam-placeholder" id="webcam-placeholder">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg>
+                <span>Camera initializing...</span>
+              </div>
+              <div class="ar-overlay" id="ar-overlay" style="display: none;">
+                <div class="ar-face-box"></div>
+                <div class="ar-emotion-label" id="ar-emotion">Engaged</div>
+                <div class="ar-confidence-meter"><div class="fill" id="ar-conf-fill" style="width: 72%;"></div></div>
+                <div class="ar-stress-alert" id="ar-stress-alert">HIGH STRESS</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column - Analysis -->
+        <div class="interview-right" style="width: 45%; display: flex; flex-direction: column; gap: 1.25rem;">
+          <!-- Tab Switcher -->
+          <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('body', this)">Body</button>
+            <button class="tab-btn" onclick="switchTab('fear', this)">Fear</button>
+            <button class="tab-btn" onclick="switchTab('emotion', this)">Emotion</button>
+          </div>
+
+          <!-- Body Language Panel -->
+          <div class="tab-panel active" id="panel-body">
+            <div class="card">
+              <h4 style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" aria-hidden="true"><path d="M18 20a6 6 0 0 0-12 0"/><circle cx="12" cy="10" r="4"/><circle cx="12" cy="12" r="10"/></svg>
+                Body Language
+              </h4>
+              <div class="flex flex-col gap-3">
+                <div class="metric-row"><span class="label">Eye Contact</span><div class="bar-wrap"><div class="progress-bar"><div class="fill" id="bl-eye" style="width:78%"></div></div></div><span class="value" id="bl-eye-val">78%</span></div>
+                <div class="metric-row"><span class="label">Face Tension</span><div class="bar-wrap"><div class="progress-bar"><div class="fill red" id="bl-tension" style="width:25%"></div></div></div><span class="value" id="bl-tension-val">25%</span></div>
+                <div class="metric-row"><span class="label">Lip Press</span><div class="bar-wrap"><div class="progress-bar"><div class="fill yellow" id="bl-lip" style="width:18%"></div></div></div><span class="value" id="bl-lip-val">18%</span></div>
+                <div class="metric-row"><span class="label">Jaw Tightness</span><div class="bar-wrap"><div class="progress-bar"><div class="fill orange" id="bl-jaw" style="width:15%"></div></div></div><span class="value" id="bl-jaw-val">15%</span></div>
+                <div class="metric-row"><span class="label">Blink Rate</span><div class="bar-wrap"><div class="progress-bar"><div class="fill cyan" id="bl-blink" style="width:60%"></div></div></div><span class="value" id="bl-blink-val">60%</span></div>
+                <div class="metric-row"><span class="label">Posture</span><div class="bar-wrap"><div class="progress-bar"><div class="fill" id="bl-posture" style="width:82%"></div></div></div><span class="value" id="bl-posture-val">82%</span></div>
+                <div class="metric-row"><span class="label">Fidgeting</span><div class="bar-wrap"><div class="progress-bar"><div class="fill red" id="bl-fidget" style="width:15%"></div></div></div><span class="value" id="bl-fidget-val">15%</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fear Panel -->
+          <div class="tab-panel" id="panel-fear">
+            <div class="card">
+              <h4 style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-red)" stroke-width="2" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+                Fear & Stress Detection
+              </h4>
+              <div class="flex items-center gap-6" style="margin-bottom: 1.5rem;">
+                <div class="fear-gauge">
+                  <canvas id="fear-gauge-canvas" width="240" height="240"></canvas>
+                  <div class="center-text">
+                    <span class="number" id="fear-score">24</span>
+                    <span class="label">Fear</span>
+                  </div>
+                </div>
+                <div class="flex flex-col gap-2 flex-1">
+                  <div class="flex justify-between text-sm"><span class="text-muted">Status</span><span id="fear-status" style="font-weight: 600; color: var(--primary);">Low</span></div>
+                  <div class="flex justify-between text-sm"><span class="text-muted">Trend</span><span id="fear-trend" style="font-weight: 600;">Stable</span></div>
+                  <div id="fear-warning" style="display: none; background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3); border-radius: var(--radius-sm); padding: 0.5rem; text-align: center;">
+                    <span style="color: var(--accent-red); font-weight: 600; font-size: 0.8rem;">High Fear Detected</span>
+                  </div>
+                </div>
+              </div>
+              <div style="margin-bottom: 1rem;">
+                <p class="text-xs text-muted" style="margin-bottom: 0.5rem;">Stress Timeline</p>
+                <canvas id="stress-timeline" class="chart-canvas" style="height: 80px;"></canvas>
+              </div>
+              <div>
+                <p class="text-xs text-muted" style="margin-bottom: 0.5rem;">Active Signals</p>
+                <div class="flex flex-wrap gap-2" id="fear-signals">
+                  <span class="badge">Facial: Relaxed</span>
+                  <span class="badge cyan">Voice: Steady</span>
+                  <span class="badge">Body: Calm</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Emotion Panel -->
+          <div class="tab-panel" id="panel-emotion">
+            <div class="card">
+              <h4 style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-yellow)" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+                Emotion Detection
+              </h4>
+              <div class="flex items-center gap-2" style="margin-bottom: 1.25rem;">
+                <span class="text-sm text-muted">Dominant:</span>
+                <span class="badge" id="dominant-emotion">Engaged</span>
+              </div>
+              <div class="flex flex-col gap-3">
+                <div class="metric-row"><span class="label">Confidence</span><div class="bar-wrap"><div class="progress-bar"><div class="fill" id="em-confidence" style="width:72%"></div></div></div><span class="value" id="em-confidence-val">72%</span></div>
+                <div class="metric-row"><span class="label">Nervousness</span><div class="bar-wrap"><div class="progress-bar"><div class="fill yellow" id="em-nervous" style="width:28%"></div></div></div><span class="value" id="em-nervous-val">28%</span></div>
+                <div class="metric-row"><span class="label">Fear</span><div class="bar-wrap"><div class="progress-bar"><div class="fill red" id="em-fear" style="width:18%"></div></div></div><span class="value" id="em-fear-val">18%</span></div>
+                <div class="metric-row"><span class="label">Anxiety</span><div class="bar-wrap"><div class="progress-bar"><div class="fill orange" id="em-anxiety" style="width:22%"></div></div></div><span class="value" id="em-anxiety-val">22%</span></div>
+                <div class="metric-row"><span class="label">Stress</span><div class="bar-wrap"><div class="progress-bar"><div class="fill red" id="em-stress" style="width:20%"></div></div></div><span class="value" id="em-stress-val">20%</span></div>
+                <div class="metric-row"><span class="label">Calmness</span><div class="bar-wrap"><div class="progress-bar"><div class="fill cyan" id="em-calm" style="width:68%"></div></div></div><span class="value" id="em-calm-val">68%</span></div>
+                <div class="metric-row"><span class="label">Engagement</span><div class="bar-wrap"><div class="progress-bar"><div class="fill" id="em-engage" style="width:75%"></div></div></div><span class="value" id="em-engage-val">75%</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Speech Analysis -->
+          <div class="card">
+            <h4 style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-yellow)" stroke-width="2" aria-hidden="true"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+              Speech Analysis
+            </h4>
+            <div class="flex flex-col gap-3">
+              <div class="metric-row"><span class="label">Confidence</span><div class="bar-wrap"><div class="progress-bar"><div class="fill" id="speech-confidence" style="width:70%"></div></div></div><span class="value" id="speech-confidence-val">70%</span></div>
+              <div class="metric-row"><span class="label">Fluency</span><div class="bar-wrap"><div class="progress-bar"><div class="fill cyan" id="speech-fluency" style="width:75%"></div></div></div><span class="value" id="speech-fluency-val">75%</span></div>
+              <div class="metric-row"><span class="label">Tone Stability</span><div class="bar-wrap"><div class="progress-bar"><div class="fill" id="speech-tone" style="width:72%"></div></div></div><span class="value" id="speech-tone-val">72%</span></div>
+              <div class="metric-row"><span class="label">Voice Energy</span><div class="bar-wrap"><div class="progress-bar"><div class="fill orange" id="speech-energy" style="width:68%"></div></div></div><span class="value" id="speech-energy-val">68%</span></div>
+              <div class="metric-row"><span class="label">Filler Words</span><div class="bar-wrap"><div class="progress-bar"><div class="fill red" id="speech-filler" style="width:20%"></div></div></div><span class="value" id="speech-filler-val">20%</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="/app.js"></script>
+  <script>
+    // ===== GD Logic =====
+    const topic = getRandomGDTopic();
+    document.getElementById('gd-topic').textContent = topic;
+
+    let timerSeconds = 0;
+    let speakSeconds = 0;
+    let isSpeaking = false;
+    let interruptions = 0;
+    let timerInterval = null;
+    let analysisInterval = null;
+    let chatInterval = null;
+    let stressHistory = [];
+
+    const metrics = {
+      eye: 78, tension: 25, lip: 18, jaw: 15, blink: 60, posture: 82, fidget: 15,
+      sConf: 70, sFlu: 75, sTone: 72, sEnergy: 68, sFill: 20,
+      emConf: 72, emNerv: 28, emFear: 18, emAnx: 22, emStress: 20, emCalm: 68, emEngage: 75,
+      fearScore: 24
+    };
+
+    // Build participants list
+    const partList = document.getElementById('participants-list');
+    AI_PARTICIPANTS.forEach(p => {
+      const div = document.createElement('div');
+      div.className = 'flex items-center gap-2';
+      div.innerHTML = `<div class="chat-avatar" style="background: ${p.color}22; color: ${p.color};">${p.avatar}</div><span class="text-sm">${p.name}</span>`;
+      partList.appendChild(div);
+    });
+
+    // GD Responses by style
+    const gdResponses = {
+      analytical: [
+        `Looking at this from a data perspective, ${topic.toLowerCase()} has shown mixed results in recent studies.`,
+        `The evidence suggests we need to consider both sides carefully. There are quantifiable impacts to consider.`,
+        `If we analyze the trends, the answer isn't straightforward. Multiple variables come into play.`,
+        `Statistically, the impact has been significant in developed markets but varies greatly elsewhere.`
+      ],
+      assertive: [
+        `I strongly believe that ${topic.split('?')[0].split('Should')[1] || 'this issue'} requires immediate action.`,
+        `We can't ignore the obvious benefits. The path forward is clear if we look at successful implementations.`,
+        `I disagree with the cautious approach. Bold steps are needed to make real progress here.`,
+        `The bottom line is: those who adapt first will lead. Hesitation is the biggest risk.`
+      ],
+      diplomatic: [
+        `I see valid points on both sides. Perhaps the answer lies in a balanced approach.`,
+        `Building on what's been said, I think we can find common ground between these perspectives.`,
+        `Everyone makes a good point. What if we considered a phased approach to address all concerns?`,
+        `I appreciate the different viewpoints. The key is implementing safeguards while encouraging innovation.`
+      ],
+      creative: [
+        `What if we think about this completely differently? Imagine a world where this is the new normal.`,
+        `Here's an unconventional take: the question itself might be framed too narrowly.`,
+        `I think the most interesting aspect is what nobody is talking about - the cultural shift happening underneath.`,
+        `Let me play devil's advocate here - what if the opposite is actually true?`
+      ]
+    };
+
+    function addChatMessage(name, color, avatar, text) {
+      const container = document.getElementById('chat-container');
+      const msg = document.createElement('div');
+      msg.className = 'chat-message animate-fade-in';
+      msg.innerHTML = `
+        <div class="chat-avatar" style="background: ${color}22; color: ${color};">${avatar}</div>
+        <div class="chat-bubble">
+          <div class="name" style="color: ${color};">${name}</div>
+          ${text}
+        </div>
+      `;
+      container.appendChild(msg);
+      container.scrollTop = container.scrollHeight;
+
+      // Check if user was speaking (interruption)
+      if (isSpeaking && name !== 'You') {
+        interruptions++;
+        document.getElementById('interruptions').textContent = interruptions;
+      }
+    }
+
+    function toggleSpeak() {
+      const btn = document.getElementById('speak-btn');
+      isSpeaking = !isSpeaking;
+      if (isSpeaking) {
+        btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg> Stop Speaking';
+        btn.classList.remove('btn-primary');
+        btn.classList.add('btn-danger');
+      } else {
+        btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg> Start Speaking';
+        btn.classList.remove('btn-danger');
+        btn.classList.add('btn-primary');
+        addChatMessage('You', '#22c55e', 'Y', '<em>(You shared your thoughts)</em>');
+      }
+    }
+
+    function startAIChat() {
+      // Initial message
+      setTimeout(() => {
+        const first = AI_PARTICIPANTS[0];
+        addChatMessage(first.name, first.color, first.avatar, gdResponses[first.style][0]);
+      }, 2000);
+
+      let msgIndex = 1;
+      chatInterval = setInterval(() => {
+        const p = AI_PARTICIPANTS[randomBetween(0, AI_PARTICIPANTS.length - 1)];
+        const responses = gdResponses[p.style];
+        const text = responses[msgIndex % responses.length];
+        addChatMessage(p.name, p.color, p.avatar, text);
+        msgIndex++;
+      }, randomBetween(6000, 12000));
+    }
+
+    function endSession() {
+      clearInterval(timerInterval);
+      clearInterval(analysisInterval);
+      clearInterval(chatInterval);
+      saveSession('sessionTime', timerSeconds);
+      saveSession('speakTime', speakSeconds);
+      saveSession('report', generateReportData());
+      window.location.href = '/report.html';
+    }
+
+    function switchTab(name, btn) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('panel-' + name).classList.add('active');
+    }
+
+    // Timer
+    timerInterval = setInterval(() => {
+      timerSeconds++;
+      document.getElementById('timer').textContent = formatTime(timerSeconds);
+      if (isSpeaking) {
+        speakSeconds++;
+        document.getElementById('speak-time').textContent = formatTime(speakSeconds);
+      }
+    }, 1000);
+
+    // Analysis
+    analysisInterval = setInterval(() => {
+      metrics.eye = fluctuate(metrics.eye, 50, 98, 4);
+      metrics.tension = fluctuate(metrics.tension, 5, 60, 5);
+      metrics.lip = fluctuate(metrics.lip, 5, 50, 4);
+      metrics.jaw = fluctuate(metrics.jaw, 5, 45, 3);
+      metrics.blink = fluctuate(metrics.blink, 30, 90, 5);
+      metrics.posture = fluctuate(metrics.posture, 55, 98, 3);
+      metrics.fidget = fluctuate(metrics.fidget, 5, 50, 4);
+      metrics.sConf = fluctuate(metrics.sConf, 40, 95, 4);
+      metrics.sFlu = fluctuate(metrics.sFlu, 45, 98, 3);
+      metrics.sTone = fluctuate(metrics.sTone, 40, 95, 4);
+      metrics.sEnergy = fluctuate(metrics.sEnergy, 35, 95, 5);
+      metrics.sFill = fluctuate(metrics.sFill, 5, 45, 3);
+      metrics.emConf = fluctuate(metrics.emConf, 35, 95, 5);
+      metrics.emNerv = fluctuate(metrics.emNerv, 5, 65, 5);
+      metrics.emFear = fluctuate(metrics.emFear, 5, 55, 4);
+      metrics.emAnx = fluctuate(metrics.emAnx, 5, 55, 4);
+      metrics.emStress = fluctuate(metrics.emStress, 5, 60, 5);
+      metrics.emCalm = fluctuate(metrics.emCalm, 30, 90, 4);
+      metrics.emEngage = fluctuate(metrics.emEngage, 40, 95, 3);
+      metrics.fearScore = fluctuate(metrics.fearScore, 5, 85, 6);
+      updateGDUI();
+    }, 800);
+
+    function updateGDUI() {
+      function setBar(id, val) {
+        const bar = document.getElementById(id);
+        const valEl = document.getElementById(id + '-val');
+        if (bar) bar.style.width = Math.round(val) + '%';
+        if (valEl) valEl.textContent = Math.round(val) + '%';
+      }
+      setBar('bl-eye', metrics.eye);
+      setBar('bl-tension', metrics.tension);
+      setBar('bl-lip', metrics.lip);
+      setBar('bl-jaw', metrics.jaw);
+      setBar('bl-blink', metrics.blink);
+      setBar('bl-posture', metrics.posture);
+      setBar('bl-fidget', metrics.fidget);
+      setBar('speech-confidence', metrics.sConf);
+      setBar('speech-fluency', metrics.sFlu);
+      setBar('speech-tone', metrics.sTone);
+      setBar('speech-energy', metrics.sEnergy);
+      setBar('speech-filler', metrics.sFill);
+      setBar('em-confidence', metrics.emConf);
+      setBar('em-nervous', metrics.emNerv);
+      setBar('em-fear', metrics.emFear);
+      setBar('em-anxiety', metrics.emAnx);
+      setBar('em-stress', metrics.emStress);
+      setBar('em-calm', metrics.emCalm);
+      setBar('em-engage', metrics.emEngage);
+
+      const emotions = { Confident: metrics.emConf, Calm: metrics.emCalm, Engaged: metrics.emEngage, Nervous: metrics.emNerv };
+      const dominant = Object.entries(emotions).sort((a, b) => b[1] - a[1])[0][0];
+      document.getElementById('dominant-emotion').textContent = dominant;
+
+      const fs = Math.round(metrics.fearScore);
+      document.getElementById('fear-score').textContent = fs;
+      drawFearGauge(document.getElementById('fear-gauge-canvas'), fs);
+      const statusEl = document.getElementById('fear-status');
+      const warningEl = document.getElementById('fear-warning');
+      if (fs >= 70) { statusEl.textContent = 'High'; statusEl.style.color = 'var(--accent-red)'; warningEl.style.display = 'block'; }
+      else if (fs >= 40) { statusEl.textContent = 'Moderate'; statusEl.style.color = 'var(--accent-yellow)'; warningEl.style.display = 'none'; }
+      else { statusEl.textContent = 'Low'; statusEl.style.color = 'var(--primary)'; warningEl.style.display = 'none'; }
+
+      const signals = document.getElementById('fear-signals');
+      const facialState = metrics.tension > 35 ? 'Tense' : 'Relaxed';
+      const voiceState = metrics.sTone < 50 ? 'Unstable' : 'Steady';
+      const bodyState = metrics.fidget > 30 ? 'Restless' : 'Calm';
+      signals.innerHTML = `<span class="badge ${facialState === 'Tense' ? 'red' : ''}">Facial: ${facialState}</span><span class="badge ${voiceState === 'Unstable' ? 'yellow' : 'cyan'}">Voice: ${voiceState}</span><span class="badge ${bodyState === 'Restless' ? 'yellow' : ''}">Body: ${bodyState}</span>`;
+
+      stressHistory.push(fs);
+      if (stressHistory.length > 30) stressHistory.shift();
+      drawStressTimelineGD();
+
+      const arEmotion = document.getElementById('ar-emotion');
+      const arConf = document.getElementById('ar-conf-fill');
+      const arStress = document.getElementById('ar-stress-alert');
+      if (arEmotion) arEmotion.textContent = dominant;
+      if (arConf) arConf.style.width = Math.round(metrics.emConf) + '%';
+      if (arStress) { if (fs >= 65) arStress.classList.add('visible'); else arStress.classList.remove('visible'); }
+    }
+
+    function drawStressTimelineGD() {
+      const canvas = document.getElementById('stress-timeline');
+      if (!canvas || !stressHistory.length) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width = canvas.offsetWidth * 2;
+      const h = canvas.height = 160;
+      ctx.scale(2, 2);
+      const cw = w / 2, ch = h / 2;
+      const pad = 8;
+      ctx.clearRect(0, 0, cw, ch);
+      ctx.beginPath();
+      stressHistory.forEach((v, i) => {
+        const x = pad + (i / Math.max(stressHistory.length - 1, 1)) * (cw - pad * 2);
+        const y = pad + (1 - v / 100) * (ch - pad * 2);
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      });
+      ctx.strokeStyle = '#ef4444';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+      const lastX = pad + ((stressHistory.length - 1) / Math.max(stressHistory.length - 1, 1)) * (cw - pad * 2);
+      ctx.lineTo(lastX, ch - pad);
+      ctx.lineTo(pad, ch - pad);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(239,68,68,0.1)';
+      ctx.fill();
+    }
+
+    // Init
+    (async () => {
+      const video = document.getElementById('webcam-video');
+      const placeholder = document.getElementById('webcam-placeholder');
+      const overlay = document.getElementById('ar-overlay');
+      const ok = await initWebcam(video);
+      if (ok) { placeholder.style.display = 'none'; overlay.style.display = 'block'; }
+      drawFearGauge(document.getElementById('fear-gauge-canvas'), metrics.fearScore);
+      startAIChat();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Setup - Face2Phase</title>
+  <meta name="theme-color" content="#0d0d1a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="container">
+      <a href="/index.html" class="navbar-brand">
+        <span class="logo-icon" aria-hidden="true">F2</span>
+        Face2Phase
+      </a>
+    </div>
+  </nav>
+
+  <main style="padding: 3rem 0 4rem; min-height: calc(100vh - 65px);">
+    <div class="container" style="max-width: 700px;">
+      <!-- Steps Indicator -->
+      <div class="steps" id="steps-indicator" style="margin-bottom: 3rem;">
+        <div class="step-item"><div class="step-dot active" data-step="1">1</div></div>
+        <div class="step-item"><div class="step-line" data-line="1"></div></div>
+        <div class="step-item"><div class="step-dot" data-step="2">2</div></div>
+        <div class="step-item"><div class="step-line" data-line="2"></div></div>
+        <div class="step-item"><div class="step-dot" data-step="3">3</div></div>
+        <div class="step-item"><div class="step-line" data-line="3"></div></div>
+        <div class="step-item"><div class="step-dot" data-step="4">4</div></div>
+      </div>
+
+      <!-- Step 1: Mode Selection -->
+      <div class="step-content active" id="step-1">
+        <h2 class="text-center" style="margin-bottom: 0.5rem;">Choose Your Mode</h2>
+        <p class="text-center text-muted" style="margin-bottom: 2rem;">Select the type of practice session you want.</p>
+        <div class="setup-options" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem;">
+          <div class="selection-card" data-value="interview" onclick="selectOption('mode', 'interview', this)" role="button" tabindex="0" aria-label="Interview mode">
+            <div class="icon" aria-hidden="true">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1.5"><path d="M18 20a6 6 0 0 0-12 0"/><circle cx="12" cy="10" r="4"/><circle cx="12" cy="12" r="10"/></svg>
+            </div>
+            <h3>Interview</h3>
+            <p>1-on-1 AI interview simulation with real-time analysis</p>
+          </div>
+          <div class="selection-card" data-value="gd" onclick="selectOption('mode', 'gd', this)" role="button" tabindex="0" aria-label="Group Discussion mode">
+            <div class="icon" aria-hidden="true">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="1.5"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <h3>Group Discussion</h3>
+            <p>Practice GD with AI participants and topic debates</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Difficulty -->
+      <div class="step-content" id="step-2" style="display: none;">
+        <h2 class="text-center" style="margin-bottom: 0.5rem;">Select Difficulty</h2>
+        <p class="text-center text-muted" style="margin-bottom: 2rem;">Choose the challenge level for your session.</p>
+        <div class="setup-options" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem;">
+          <div class="selection-card" onclick="selectOption('difficulty', 'easy', this)" role="button" tabindex="0">
+            <div class="icon" aria-hidden="true">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+            </div>
+            <h3>Easy</h3>
+            <p>Basic behavioral and introductory questions</p>
+          </div>
+          <div class="selection-card" onclick="selectOption('difficulty', 'medium', this)" role="button" tabindex="0">
+            <div class="icon" aria-hidden="true">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--accent-yellow)" stroke-width="1.5"><path d="M2 12h5"/><path d="M17 12h5"/><path d="M12 2v5"/><path d="M12 17v5"/><circle cx="12" cy="12" r="4"/></svg>
+            </div>
+            <h3>Medium</h3>
+            <p>Situational and problem-solving questions</p>
+          </div>
+          <div class="selection-card" onclick="selectOption('difficulty', 'hard', this)" role="button" tabindex="0">
+            <div class="icon" aria-hidden="true">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--accent-red)" stroke-width="1.5"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            <h3>Hard</h3>
+            <p>Case studies, estimation, and pressure questions</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: Resume Upload -->
+      <div class="step-content" id="step-3" style="display: none;">
+        <h2 class="text-center" style="margin-bottom: 0.5rem;">Upload Resume</h2>
+        <p class="text-center text-muted" style="margin-bottom: 2rem;">Optional. Upload your resume for personalized questions.</p>
+        <div class="upload-area" id="upload-area" onclick="document.getElementById('resume-input').click()">
+          <div class="icon" aria-hidden="true">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          </div>
+          <p style="font-weight: 600; margin-bottom: 0.25rem;">Drag & drop your resume here</p>
+          <p class="text-muted text-sm">or click to browse (PDF, DOC, DOCX)</p>
+          <input type="file" id="resume-input" accept=".pdf,.doc,.docx" aria-label="Upload resume file">
+        </div>
+        <div id="file-info" style="display: none; margin-top: 1rem; padding: 1rem; background: var(--primary-dim); border-radius: var(--radius); text-align: center;">
+          <span id="file-name" style="font-weight: 600; color: var(--primary);"></span>
+          <button onclick="clearFile()" class="btn btn-sm btn-outline" style="margin-left: 1rem;">Remove</button>
+        </div>
+        <p class="text-center text-muted text-sm" style="margin-top: 1rem;">You can skip this step if you prefer generic questions.</p>
+      </div>
+
+      <!-- Step 4: Company Type -->
+      <div class="step-content" id="step-4" style="display: none;">
+        <h2 class="text-center" style="margin-bottom: 0.5rem;">Company Type</h2>
+        <p class="text-center text-muted" style="margin-bottom: 2rem;">Select the type of company you are preparing for.</p>
+        <div class="setup-options" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem;">
+          <div class="selection-card" onclick="selectOption('company', 'product', this)" role="button" tabindex="0">
+            <div class="icon" aria-hidden="true">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            </div>
+            <h3>Product-Based</h3>
+            <p>Tech companies, startups, and product-focused roles</p>
+          </div>
+          <div class="selection-card" onclick="selectOption('company', 'service', this)" role="button" tabindex="0">
+            <div class="icon" aria-hidden="true">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </div>
+            <h3>Service-Based</h3>
+            <p>Consulting firms, IT services, and client-facing roles</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Buttons -->
+      <div class="flex justify-between" style="margin-top: 2.5rem;">
+        <button class="btn btn-secondary" id="btn-back" onclick="prevStep()" style="visibility: hidden;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+          Back
+        </button>
+        <button class="btn btn-primary" id="btn-next" onclick="nextStep()" disabled>
+          Next
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <script src="/app.js"></script>
+  <script>
+    let currentStep = 1;
+    const selections = { mode: null, difficulty: null, company: null };
+
+    function selectOption(key, value, el) {
+      selections[key] = value;
+      saveSession(key, value);
+      const parent = el.parentElement;
+      parent.querySelectorAll('.selection-card').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+      document.getElementById('btn-next').disabled = false;
+    }
+
+    function updateStepUI() {
+      // Show/hide step content
+      document.querySelectorAll('.step-content').forEach(s => s.style.display = 'none');
+      document.getElementById('step-' + currentStep).style.display = 'block';
+
+      // Update step dots
+      document.querySelectorAll('.step-dot').forEach(d => {
+        const s = parseInt(d.dataset.step);
+        d.classList.remove('active', 'done');
+        if (s === currentStep) d.classList.add('active');
+        else if (s < currentStep) d.classList.add('done');
+      });
+      document.querySelectorAll('.step-line').forEach(l => {
+        const s = parseInt(l.dataset.line);
+        l.classList.toggle('active', s < currentStep);
+      });
+
+      // Back button visibility
+      document.getElementById('btn-back').style.visibility = currentStep > 1 ? 'visible' : 'hidden';
+
+      // Next button text
+      const btnNext = document.getElementById('btn-next');
+      if (currentStep === 4) {
+        btnNext.innerHTML = 'Start Session <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>';
+      } else if (currentStep === 3) {
+        btnNext.innerHTML = 'Next <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>';
+        btnNext.disabled = false; // resume is optional
+      } else {
+        btnNext.innerHTML = 'Next <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>';
+      }
+
+      // Disable next if no selection for required steps
+      if (currentStep === 1 && !selections.mode) btnNext.disabled = true;
+      else if (currentStep === 2 && !selections.difficulty) btnNext.disabled = true;
+      else if (currentStep === 4 && !selections.company) btnNext.disabled = true;
+      else btnNext.disabled = false;
+    }
+
+    function nextStep() {
+      if (currentStep === 4) {
+        // Navigate to chosen mode
+        if (selections.mode === 'gd') {
+          window.location.href = '/group-discussion.html';
+        } else {
+          window.location.href = '/interview.html';
+        }
+        return;
+      }
+      currentStep++;
+      updateStepUI();
+    }
+
+    function prevStep() {
+      if (currentStep > 1) {
+        currentStep--;
+        updateStepUI();
+      }
+    }
+
+    // File Upload
+    const uploadArea = document.getElementById('upload-area');
+    const resumeInput = document.getElementById('resume-input');
+
+    uploadArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadArea.classList.add('drag-over');
+    });
+    uploadArea.addEventListener('dragleave', () => {
+      uploadArea.classList.remove('drag-over');
+    });
+    uploadArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadArea.classList.remove('drag-over');
+      if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+    });
+    resumeInput.addEventListener('change', () => {
+      if (resumeInput.files.length) handleFile(resumeInput.files[0]);
+    });
+
+    function handleFile(file) {
+      document.getElementById('file-name').textContent = file.name;
+      document.getElementById('file-info').style.display = 'block';
+      saveSession('resumeName', file.name);
+    }
+
+    function clearFile() {
+      resumeInput.value = '';
+      document.getElementById('file-info').style.display = 'none';
+      sessionStorage.removeItem('f2p_resumeName');
+    }
+
+    updateStepUI();
+  </script>
+</body>
+</html>
